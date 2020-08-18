@@ -1,7 +1,7 @@
 # html-docdex
 A command-line utility to index html documents from url or local storage
 
-[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Mr5he11/html-docdex/blob/master/LICENSE)
+[![GitHub](https://img.shields.io/github/license/Mr5he11/html-docdex?style=flat-square)](https://github.com/Mr5he11/html-docdex/blob/master/LICENSE)
 
 
 ### Preface
