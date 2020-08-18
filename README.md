@@ -2,6 +2,8 @@
 A command-line utility to index html documents from url or local storage
 
 [![GitHub](https://img.shields.io/github/license/Mr5he11/html-docdex?style=flat-square)](https://github.com/Mr5he11/html-docdex/blob/master/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Mr5he11/html-docdex?style=flat-square)](https://github.com/Mr5he11/html-docdex/commits/master)
+
 
 
 ### Preface
