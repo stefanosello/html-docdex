@@ -1,26 +1,30 @@
+#include "html_document.hpp"
+#include <sqlite3.h>
 #include <iostream>
 #include <stdio.h>
-#include <sqlite3.h> 
-#include "html_document.hpp"
+#include <string>
 using namespace std;
 
 int main() {
 	sqlite3 *db_connection;
 	HtmlDocument *doc;
-    int error_status;
-    std::string title;
+  int error_status;
+  std::string title;
+
+  string document_url = "https://en.wikipedia.org/wiki/Alcide_De_Gasperi";
 	
 	error_status = sqlite3_open("prova.db", &db_connection);
 	if (error_status) {
 		fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db_connection));
 		return 1;
 	}
-	std::cout << "Successfully opened sqlite db!\n";	
+	std::cout << "Successfully opened sqlite db!" << endl;	
 	sqlite3_close(db_connection);
 
-	doc = new HtmlDocument("https://en.wikipedia.org/wiki/Alcide_De_Gasperi");
-	title = doc->get_title();
-	std::cout << endl << title << endl;
+	doc = new HtmlDocument(document_url);
+	title = doc->get_tag_content("h1");
+
+	cout << title << endl;
 
 	return 0;
 }

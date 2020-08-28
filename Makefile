@@ -12,6 +12,7 @@ main.o:
 html_document.o:
 	$(CC) $(CFLAGS) -c ./html-docdex/html_document.cpp ./html-docdex/html_document.hpp -lcurl
 
+
 clean:
 	@echo "Cleaning up..."
 	rm -f core *.o

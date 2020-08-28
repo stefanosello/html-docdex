@@ -1,16 +1,23 @@
 #ifndef HTML_DOCUMENT_H
 #define HTML_DOCUMENT_H
+
 #include <curl/curl.h>
 #include <string>
+
+using namespace std;
+
+static size_t get_html(void *ptr, size_t size, size_t nmemb, void *stream);
 
 class HtmlDocument
 {
 private:
-	CURLcode content;
+	string content;
+  string source_url;
+  string tmp_filename;
 public:
-	HtmlDocument(char *url);
-	CURLcode get_content();
-	std::string get_title();
+	HtmlDocument(string source_url);
+	string get_content();
+	string get_tag_content(string tag);
 };
 
 
