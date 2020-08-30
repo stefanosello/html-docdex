@@ -3,8 +3,8 @@ CC = g++
 
 all: docdex
 
-docdex: main.o html_document.o stemmer.o html_handler.o
-	$(CC) $(CFLAGS) -o docdex main.o html_document.o stemmer.o html_handler.o -lsqlite3 -lcurl
+docdex: main.o html_document.o stemmer.o html_handler.o db_handler.o
+	$(CC) $(CFLAGS) -o docdex main.o html_document.o stemmer.o html_handler.o db_handler.o -lsqlite3 -lcurl
 
 main.o:
 	$(CC) $(CFLAGS) -c ./html-docdex/main.cpp -lsqlite3
@@ -17,6 +17,9 @@ stemmer.o:
 
 html_handler.o:
 	$(CC) $(CFLAGS) -c ./html-docdex/html_handler.cpp ./html-docdex/html_handler.hpp
+
+db_handler.o:
+	$(CC) $(CFLAGS) -c ./html-docdex/db_handler.cpp ./html-docdex/db_handler.hpp
 
 
 clean:
