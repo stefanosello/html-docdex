@@ -1,5 +1,6 @@
 #include "html_document.hpp"
 #include "stemmer.hpp"
+#include "html_handler.hpp"
 #include <sqlite3.h>
 #include <iostream>
 #include <stdio.h>
@@ -10,9 +11,8 @@ int main() {
 	sqlite3 *db_connection;
 	HtmlDocument *doc;
   int error_status;
-  std::string title;
 
-  string document_url = "https://en.wikipedia.org/wiki/Alcide_De_Gasperi";
+  string document_url = "https://www.dsi.unive.it/~salibra/";
 	
 	error_status = sqlite3_open("prova.db", &db_connection);
 	if (error_status) {
@@ -23,12 +23,13 @@ int main() {
 	sqlite3_close(db_connection);
 
 	doc = new HtmlDocument(document_url);
-	//title = doc->get_tag_content("");
+	string html_string = doc->get_tag_content("body");
+	cout << "tag content: " << html_string << endl;
+	string stripped = HtmlHandler::strip_tags(html_string);
 
-	//cout << title << endl;
+	cout << "stripped body: " << stripped << endl << endl;
 
-	string stem = Stemmer::stem("demonstrating");
-
+	string stem = Stemmer::stem("yelling");
 	cout << "Stemming: " << stem << endl;
 
 	return 0;

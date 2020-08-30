@@ -1,4 +1,5 @@
 #include "html_document.hpp"
+#include "html_handler.hpp"
 #include <regex>
 #include <string>
 #include <fstream>
@@ -7,6 +8,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <curl/curl.h>
+#include <algorithm>
+
 
 using namespace std;
 
@@ -47,6 +50,7 @@ HtmlDocument::HtmlDocument(string source_url) {
       ostringstream string_stream;
       string_stream << file.rdbuf(); // reading data
       this->content = string_stream.str();
+      std::transform(this->content.begin(), this->content.end(), this->content.begin(), ::tolower);
       remove(this->tmp_filename.c_str());
    	} else {
    		perror("No temporary html file found");
@@ -62,18 +66,7 @@ string HtmlDocument::get_content() {
 }
 
 string HtmlDocument::get_tag_content(string tag) {
-	regex regexp("<" + tag + "(?:.*)>(.*)</" + tag + ">");
-	cmatch matches;
-	string result = "";
-
-	regex_search(this->content.c_str(), matches, regexp);
-
-	// NB: the first entry in 'title_matches' is the whole string itself, so counter starts from 1
-	for (unsigned i=1; i < matches.size(); ++i) {
-	  result += matches.str(i);
-	}
-
-	return result;
+	return HtmlHandler::get_tag_content(this->content, tag);
 }
 
 

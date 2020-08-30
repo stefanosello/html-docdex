@@ -62,11 +62,10 @@ namespace Stemmer {
     regex re3;
     regex re4;
 
+    std::transform(word.begin(), word.end(), word.begin(), ::tolower);
+
     if (word.length() < 3)
       return word;
-
-    if (word.compare(0,1, "y") == 0)
-      word = "Y" + word.substr(1,word.length() -1);
 
     // Step 1a
     re = "^(.+?)(ss|i)es$";
@@ -180,11 +179,6 @@ namespace Stemmer {
       re = ".$";
       word = regex_replace(word, re, "");
     }
-
-    // and turn initial Y back to y
-
-    if (word.compare(0,1, "Y") == 0)
-      word = "y" + word.substr(1,word.length() -1);
 
     return stem;
 
