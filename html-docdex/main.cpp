@@ -1,4 +1,5 @@
 #include "html_document.hpp"
+#include "stemmer.hpp"
 #include <sqlite3.h>
 #include <iostream>
 #include <stdio.h>
@@ -22,9 +23,13 @@ int main() {
 	sqlite3_close(db_connection);
 
 	doc = new HtmlDocument(document_url);
-	title = doc->get_tag_content("h1");
+	//title = doc->get_tag_content("");
 
-	cout << title << endl;
+	//cout << title << endl;
+
+	string stem = Stemmer::stem("demonstrating");
+
+	cout << "Stemming: " << stem << endl;
 
 	return 0;
 }
