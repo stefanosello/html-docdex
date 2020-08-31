@@ -19,23 +19,27 @@ DbHandler::~DbHandler() {
 int DbHandler::init_db() {
   char *db_error_message = 0;
   int result;
-  /* Create SQL statement */
-  string sql = "CREATE TABLE WORDS("  \
-        "id INT PRIMARY KEY," \
-        "word           TEXT    NOT NULL," \
-        "weight         INT     NOT NULL," \
-        "website        TEXT );";
+
+  /* Create SQL statements */
+  string sql_create = "CREATE TABLE words(id INT PRIMARY KEY, word TEXT NOT NULL, weight INT NOT NULL, website TEXT NOT NULL);";
+  string sql_index = "CREATE INDEX word_idx ON words(word);";
+  string sql = sql_create + sql_index;
+
   result = sqlite3_exec(this->db_reference, sql.c_str(), init_callback, 0, &db_error_message);
+  
   if( result != SQLITE_OK ){
     fprintf(stderr, "SQL error: %s\n", db_error_message);
     sqlite3_free(db_error_message);
+    return -1;
   } else {
     fprintf(stdout, "Table created successfully\n");
+    return 0;
   }
-  return 0;
 }
 
 int DbHandler::insert_data(string word, string url, int weight) {
+  string sql_insert = "INSERT INTO words (word, weight, website) VALUES ('" + word + "'," + weight + ", '" + url + "')";
+  result = sqlite3_exec(this->db_reference, sql_insert.c_str(), -1, 0, &db_error_message);
   return 0;
 }
 
