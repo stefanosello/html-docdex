@@ -18,6 +18,7 @@ public:
 	HtmlDocument(string source_url);
 	string get_content();
 	string get_tag_content(string tag);
+  string get_url();
 };
 
 

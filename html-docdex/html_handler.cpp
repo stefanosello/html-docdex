@@ -25,6 +25,7 @@ namespace HtmlHandler {
           break;
         case '>':
           tag = false;
+          stripped_string += " ";
           break;
         default:
           break;

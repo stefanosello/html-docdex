@@ -64,7 +64,7 @@ namespace Stemmer {
 
     std::transform(word.begin(), word.end(), word.begin(), ::tolower);
 
-    if (word.length() < 3)
+    if (word.length() <= 3)
       return word;
 
     // Step 1a
@@ -180,7 +180,7 @@ namespace Stemmer {
       word = regex_replace(word, re, "");
     }
 
-    return stem;
+    return stem.length() > 0 ? stem : word;
 
 
   }

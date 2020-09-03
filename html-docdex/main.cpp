@@ -6,26 +6,23 @@
 #include <iostream>
 #include <stdio.h>
 #include <string>
+#include <regex>
 using namespace std;
 
 int main() {
 	sqlite3 *db_connection;
 	HtmlDocument *doc;
   int error_status;
+  
+
   DbHandler *db_handler = new DbHandler("prova.db");
   db_handler->init_db();
 
   string document_url = "https://www.dsi.unive.it/~salibra/";
 
 	doc = new HtmlDocument(document_url);
-	string html_string = doc->get_tag_content("body");
-	cout << "tag content: " << html_string << endl;
-	string stripped = HtmlHandler::strip_tags(html_string);
-
-	cout << "stripped body: " << stripped << endl << endl;
-
-	string stem = Stemmer::stem("yelling");
-	cout << "Stemming: " << stem << endl;
-
+	db_handler->insert_html_document_data(doc);
+	db_handler->get_data("torino");
+	
 	return 0;
 }

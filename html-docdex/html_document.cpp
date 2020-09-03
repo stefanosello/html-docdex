@@ -69,4 +69,8 @@ string HtmlDocument::get_tag_content(string tag) {
 	return HtmlHandler::get_tag_content(this->content, tag);
 }
 
+string HtmlDocument::get_url() {
+  return this->source_url;
+}
+
 
