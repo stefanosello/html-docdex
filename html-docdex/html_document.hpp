@@ -1,3 +1,13 @@
+// -*- lsst-c++ -*-
+/*
+* @file html_document.hpp
+* @author Stefano Sello
+* @date August 2020
+*
+* HtmlDocument class header file.
+* Documentation for each method can be found in html_document.cpp.
+*/
+
 #ifndef HTML_DOCUMENT_H
 #define HTML_DOCUMENT_H
 

@@ -1,6 +1,6 @@
 // -*- lsst-c++ -*-
 /*
-* @file db_handler.cpp
+* @file db_handler.hpp
 * @author Stefano Sello
 * @date August 2020
 *

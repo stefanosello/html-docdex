@@ -63,9 +63,8 @@ static int select_callback(void* data, int argc, char** argv, char** azColName) 
 */
 DbHandler::DbHandler(string db_file_path) {
   int error_status = sqlite3_open(db_file_path.c_str(), &(this->db_reference));
-  if (error_status) {
+  if (error_status)
     fprintf(stderr, "Can't open database: %s \n", sqlite3_errmsg(this->db_reference));
-  }
 }
 
 /**

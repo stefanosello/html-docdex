@@ -1,3 +1,14 @@
+// -*- lsst-c++ -*-
+/*
+* @file html_document.cpp
+* @author Stefano Sello
+* @date August 2020
+*
+* html_document.cpp is the implementation file for the class HtmlDocument.
+* It represents an html document that is going to be indexed and has all methods needed
+* to download and parse the document.
+*/
+
 #include "html_document.hpp"
 #include "html_handler.hpp"
 #include <regex>
@@ -10,14 +21,32 @@
 #include <curl/curl.h>
 #include <algorithm>
 
-
 using namespace std;
 
+/**
+* Callback for the curl download method.
+* Basically, writes the downloaded content into a given file
+* in order to make it available for later use.
+* 
+* @param ptr The output file pointer
+* @param size The size of the html data downloaded
+* @param nmemb
+* @param stream The input stream of the downloaded document
+* @returns the fwrite operation result
+*/
 static size_t get_html(void *ptr, size_t size, size_t nmemb, void *stream) {
   int written = fwrite(ptr, size, nmemb, (FILE *)stream);
   return written;
 }
 
+/**
+* HtmlDocument class constructor.
+* Takes the url of the document as a string and uses cUrl library
+* to save its content as a string into content attribute.
+* In order to do so, creates a temoporary file where to save the downloaded html page.
+* 
+* @param source_url The url of the document to index
+*/
 HtmlDocument::HtmlDocument(string source_url) {
 	string html_filename = "tmp/tmp_html.html";
 	CURL *curl = curl_easy_init();
@@ -61,14 +90,31 @@ HtmlDocument::HtmlDocument(string source_url) {
 
 }
 
+/**
+* Getter for content attribute
+* 
+* @returns the content attribute as a string
+*/
 string HtmlDocument::get_content() {
 	return this->content;
 }
 
+/**
+* Processes the html content and returns the content of a
+* specified HTML tag.
+* 
+* @param tag The tag to search for
+* @returns the content of the given tag in the current document
+*/
 string HtmlDocument::get_tag_content(string tag) {
 	return HtmlHandler::get_tag_content(this->content, tag);
 }
 
+/**
+* Getter for the source url
+* 
+* @returns the source url of the document
+*/
 string HtmlDocument::get_url() {
   return this->source_url;
 }
