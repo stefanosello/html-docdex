@@ -64,11 +64,8 @@ namespace HtmlHandler {
 
   string get_escaped_html_content(string str) {
     string subs[] = {"&quot;","&apos;","&amp;","&lt;","&gt;"};
-    
     string reps[] = {"\"","'","&","<",">"};
-    
     size_t found = 0;
-
     for(int j = 0; j < 5; j++) {
       while((found = str.find(subs[j])) != string::npos) {
         str.replace(found,subs[j].length(),reps[j]);

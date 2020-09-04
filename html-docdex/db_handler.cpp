@@ -1,6 +1,10 @@
 // -*- lsst-c++ -*-
 /*
-* db_handler.cpp is the definition file for the class DbHandler.
+* @file db_handler.cpp
+* @author Stefano Sello
+* @date August 2020
+*
+* db_handler.cpp is the implementation file for the class DbHandler.
 * It basically acts as a wrapper for the main db operations.
 * Ideally, only one object of this class should be instatiated for a corresponding db file.
 * The DBMS under the whole system is sqlite3, made available thanks to the official c/c++ library.
@@ -147,7 +151,7 @@ int DbHandler::insert_data(vector<string> words, string url, int weight) {
 */
 int DbHandler::get_data(string word) {
   char *db_error_message = 0;
-  string sql_select = "SELECT DISTINCT website FROM words WHERE word = '" + Stemmer::stem(word) + "' LIKE word ORDER BY weight ASC;";
+  string sql_select = "SELECT DISTINCT website FROM words WHERE word LIKE '" + Stemmer::stem(word) + "\%' ORDER BY weight ASC;";
   int result = sqlite3_exec(this->db_reference, sql_select.c_str(), select_callback, 0, &db_error_message);
   return result;
 }
@@ -163,36 +167,37 @@ int DbHandler::get_data(string word) {
 * @returns the query result code.
 */
 int DbHandler::insert_html_tag_data(HtmlDocument *doc, string tag, int weight) {
+  char c;
   size_t pos;
   string token;
+  string stripped;
+  char prev_c = 'a';
   bool skip = false;
-  vector<string> terms;
   string html_string;
+  vector<string> terms;
   string delimiter = "_";
 
-  regex substitution_regex("([^a-zA-Z0-9_]+)");
   html_string = doc->get_tag_content(tag);
-
-  string stripped = HtmlHandler::strip_tags(html_string);
+  stripped = HtmlHandler::strip_tags(html_string);
 
   for(string::iterator i = stripped.begin(); i != stripped.end(); i++) {
-    char c = stripped.at(i - stripped.begin());
+    c = stripped.at(i - stripped.begin());
     if(!isalnum(c)) {
-      if (i == stripped.begin() || stripped.at(i - stripped.begin() - 1) == '_') {
+      if (i == stripped.begin() || prev_c == '_') {
         stripped.erase(i);
       } else {
         stripped.replace(i - stripped.begin(), 1, delimiter);
       }
     }
+    prev_c = c;
   }
 
   while ((pos = stripped.find(delimiter)) != string::npos) {
     token = stripped.substr(0, pos);
     if (token.length() > 0) {
       token.erase(remove_if(token.begin(), token.end(), []( char const& c ) -> bool { return !isalnum(c); } ), token.end());
-      if (token.length() > 3) {
+      if (token.length() > 3)
         terms.push_back(token);
-      }
     }
     stripped.erase(0, pos + delimiter.length());
   }

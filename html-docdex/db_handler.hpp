@@ -1,8 +1,13 @@
 // -*- lsst-c++ -*-
 /*
+* @file db_handler.cpp
+* @author Stefano Sello
+* @date August 2020
+*
 * DbHandler class header file.
 * Documentation for each method can be found in db_handler.cpp.
 */
+
 #ifndef DB_HANDLER_H
 #define DB_HANDLER_H
 
