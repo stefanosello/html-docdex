@@ -132,7 +132,9 @@ int DbHandler::insert_data(vector<string> words, string url, int weight) {
     if (i < (words.size() - 1)) {
       sql_insert += ", ";
     }
+    i++;
   });
+
   int result = sqlite3_exec(this->db_reference, sql_insert.c_str(), insert_callback, 0, &db_error_message);
   return result;
 }
@@ -166,19 +168,24 @@ int DbHandler::insert_html_tag_data(HtmlDocument *doc, string tag, int weight) {
   bool skip = false;
   vector<string> terms;
   string html_string;
-  string delimiter = " ";
+  string delimiter = "_";
 
-  regex substitution_regex("[^a-zA-Z0-9]*");
-
-  try {
-    html_string = doc->get_tag_content(tag);
-  } catch (...) {
-    cerr << "Tag content retrieving failed for tag " << tag << " and url " <<  doc->get_url();
-    return -1;
-  }
+  regex substitution_regex("([^a-zA-Z0-9_]+)");
+  html_string = doc->get_tag_content(tag);
 
   string stripped = HtmlHandler::strip_tags(html_string);
-  regex_replace(stripped, substitution_regex, " ");
+
+  for(string::iterator i = stripped.begin(); i != stripped.end(); i++) {
+    char c = stripped.at(i - stripped.begin());
+    if(!isalnum(c)) {
+      if (i == stripped.begin() || stripped.at(i - stripped.begin() - 1) == '_') {
+        stripped.erase(i);
+      } else {
+        stripped.replace(i - stripped.begin(), 1, delimiter);
+      }
+    }
+  }
+
   while ((pos = stripped.find(delimiter)) != string::npos) {
     token = stripped.substr(0, pos);
     if (token.length() > 0) {
@@ -192,7 +199,7 @@ int DbHandler::insert_html_tag_data(HtmlDocument *doc, string tag, int weight) {
 
   for_each(terms.begin(), terms.end(), [](string s){
     s = Stemmer::stem(s);
-  }); 
+  });
 
   return this->insert_data(terms, doc->get_url(), weight);
 }
@@ -205,14 +212,12 @@ int DbHandler::insert_html_tag_data(HtmlDocument *doc, string tag, int weight) {
 * @returns nothing.
 */
 void DbHandler::insert_html_document_data(HtmlDocument *doc) {
-  this->insert_html_tag_data(doc, "title", 0);
-  this->insert_html_tag_data(doc, "h1", 1);
-  this->insert_html_tag_data(doc, "h2", 2);
-  this->insert_html_tag_data(doc, "h3", 3);
-  this->insert_html_tag_data(doc, "h4", 4);
-  // this->insert_html_tag_data(doc, "b", 5);
-  this->insert_html_tag_data(doc, "strong", 6);
-  this->insert_html_tag_data(doc, "li", 7);
-  this->insert_html_tag_data(doc, "p", 8);
-  this->insert_html_tag_data(doc, "body", 9);
+  
+  this->insert_html_tag_data(doc, "title", 1);
+  this->insert_html_tag_data(doc, "h1", 2);
+  this->insert_html_tag_data(doc, "h2", 3);
+  this->insert_html_tag_data(doc, "li", 4);
+  this->insert_html_tag_data(doc, "a", 5);
+  this->insert_html_tag_data(doc, "body", 6);
+
 } 

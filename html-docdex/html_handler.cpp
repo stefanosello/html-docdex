@@ -41,12 +41,12 @@ namespace HtmlHandler {
   string get_tag_content(string html_string, string searched_tag) {
     string html;
     string tag_content = "";
-    html.assign(html_string);
+    html.assign(get_escaped_html_content(html_string));
     int length = html_string.length();
     bool tag = false;
 
-    size_t found = html.find("<" + searched_tag);
-    while (found != string::npos) {
+    size_t found;
+    while ((found = html.find("<" + searched_tag)) != string::npos) {
       char ch_after_match = html.at(found + searched_tag.length() + 1);
       if (ch_after_match == '>' || ch_after_match == ' ') {
         size_t content_start = ch_after_match == ' ' ? (html.find(">", found) + 1) : (found + searched_tag.length() + 2);
@@ -54,11 +54,26 @@ namespace HtmlHandler {
         tag_content += html.substr(content_start, (content_end - content_start));
         html = html.substr(content_end + searched_tag.length() + 3);
       } else {
-        throw malformed_html_exception;
+        /* the found tag is not what we are searching for, we have to go on */
+        html = html.substr(found + searched_tag.length());
       }
-      found = html.find("<" + searched_tag);
     }
 
     return tag_content;
+  }
+
+  string get_escaped_html_content(string str) {
+    string subs[] = {"&quot;","&apos;","&amp;","&lt;","&gt;"};
+    
+    string reps[] = {"\"","'","&","<",">"};
+    
+    size_t found = 0;
+
+    for(int j = 0; j < 5; j++) {
+      while((found = str.find(subs[j])) != string::npos) {
+        str.replace(found,subs[j].length(),reps[j]);
+      }
+    }
+    return str;
   }
 }
