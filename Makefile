@@ -1,5 +1,5 @@
 CFLAGS = -O
-CC = g++ 
+CC = g++ -std=c++11 
 
 all: docdex
 

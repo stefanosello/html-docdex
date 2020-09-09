@@ -176,7 +176,7 @@ int DbHandler::insert_html_tag_data(HtmlDocument *doc, string tag, int weight) {
   vector<string> terms;
   string delimiter = "_";
 
-  html_string = doc->get_tag_content(tag);
+  html_string = HtmlHandler::get_tag_content(doc->get_content(), tag);
   stripped = HtmlHandler::strip_tags(html_string);
 
   for(string::iterator i = stripped.begin(); i != stripped.end(); i++) {
@@ -200,10 +200,6 @@ int DbHandler::insert_html_tag_data(HtmlDocument *doc, string tag, int weight) {
     }
     stripped.erase(0, pos + delimiter.length());
   }
-
-  for_each(terms.begin(), terms.end(), [](string s){
-    s = Stemmer::stem(s);
-  });
 
   return this->insert_data(terms, doc->get_url(), weight);
 }

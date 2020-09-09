@@ -99,16 +99,6 @@ string HtmlDocument::get_content() {
 	return this->content;
 }
 
-/**
-* Processes the html content and returns the content of a
-* specified HTML tag.
-* 
-* @param tag The tag to search for
-* @returns the content of the given tag in the current document
-*/
-string HtmlDocument::get_tag_content(string tag) {
-	return HtmlHandler::get_tag_content(this->content, tag);
-}
 
 /**
 * Getter for the source url
