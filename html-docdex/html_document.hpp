@@ -1,12 +1,12 @@
 // -*- lsst-c++ -*-
 /*
-* @file html_document.hpp
-* @author Stefano Sello
-* @date August 2020
-*
-* HtmlDocument class header file.
-* Documentation for each method can be found in html_document.cpp.
-*/
+ * @file html_document.hpp
+ * @author Stefano Sello
+ * @date August 2020
+ *
+ * HtmlDocument class header file.
+ * Documentation for each method can be found in html_document.cpp.
+ */
 
 #ifndef HTML_DOCUMENT_H
 #define HTML_DOCUMENT_H
@@ -22,13 +22,13 @@ class HtmlDocument
 {
 private:
 	string content;
-  string source_url;
-  string tmp_filename;
+	string source_url;
+	string tmp_filename;
+
 public:
 	HtmlDocument(string source_url);
 	string get_content();
-  string get_url();
+	string get_url();
 };
-
 
 #endif
