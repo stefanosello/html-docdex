@@ -143,12 +143,13 @@ int DbHandler::insert_data(vector<string> words, string url, int weight)
 	int i = 0;
 	string sql_insert = "INSERT OR IGNORE INTO words (word, weight, website) VALUES ";
 	for_each(words.begin(), words.end(), [&](string word)
-			 {
-    sql_insert += "('" + word + "'," + to_string(weight) + ", '" + url + "')";
-    if (i < (words.size() - 1)) {
-      sql_insert += ", ";
-    }
-    i++; });
+		{
+    		sql_insert += "('" + word + "'," + to_string(weight) + ", '" + url + "')";
+    		if (i < (words.size() - 1))
+				sql_insert += ", ";
+    		i++;
+		}
+	);
 
 	int result = sqlite3_exec(this->db_reference, sql_insert.c_str(), insert_callback, 0, &db_error_message);
 	return result;
@@ -215,9 +216,7 @@ int DbHandler::insert_html_tag_data(HtmlDocument *doc, string tag, int weight)
 		token = stripped.substr(0, pos);
 		if (token.length() > 0)
 		{
-			token.erase(remove_if(token.begin(), token.end(), [](char const &c) -> bool
-								  { return !isalnum(c); }),
-						token.end());
+			token.erase(remove_if(token.begin(), token.end(), [](char const &c) -> bool { return !isalnum(c); }), token.end());
 			if (token.length() > 3)
 				terms.push_back(token);
 		}
